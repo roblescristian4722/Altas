@@ -24,6 +24,32 @@ export default class Altas extends Component {
     }
   }
 
+  uploadImageToServer = async () => {
+    const response = await fetch(this.state.fileUri);
+    const blob = await response.blob();
+    var reader = new FileReader();
+    reader.onload = () => {
+      var InsertAPI = 'http://cristianrobles4722.000webhostapp.com/upload.php';
+      console.log(reader.result);
+      var Data={img:reader.result};
+      var headers={
+        'Accept':'application/json',
+        'Content-Type':'application.json'
+      }
+      fetch(InsertAPI,{
+        method:'POST',
+        headers:headers,
+        body:JSON.stringify(Data),
+        }).then((response)=>response.json()).then((response)=>{
+        console.log("server "+response)
+      })
+      .catch(err=>{
+        console.log(err);
+      })
+    }
+    reader.readAsDataURL(blob);
+  }
+
   render() {
     const accesoFotos = () => {
       ImagePicker.launchImageLibrary(
@@ -41,9 +67,8 @@ export default class Altas extends Component {
           });
           var finalArray = array[0][0];
           if (finalArray != undefined) {
-            console.log()
             this.setState({fileUri: finalArray.uri}, () => {
-              console.log(`uri: ${this.state.fileUri}`)
+              this.uploadImageToServer();
             });
           }
         }
