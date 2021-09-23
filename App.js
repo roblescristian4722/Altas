@@ -25,7 +25,6 @@ import {
   LearnMoreLinks,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
-
 import Menu from './Menu';
 
 const Section = ({children, title}): Node => {

@@ -1,18 +1,55 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input, Image, Button } from 'react-native-elements';
-import {Picker} from '@react-native-picker/picker';
+import { Picker } from '@react-native-picker/picker';
+import * as ImagePicker from 'react-native-image-picker';
 
 export default class Altas extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedValue: ""
+      selectedValue: "",
+      fileUri: ""
     };
   }
 
+  renderFileUri() {
+    if (this.state.fileUri) {
+      return <Image source={{uri: this.state.fileUri}} style={{width: 100, height: 100}}/>
+    } else {
+      return (
+        <Image source={require('./img/user.png')} style={{width: 100, height: 100}}/>
+      )
+    }
+  }
+
   render() {
+    const accesoFotos = () => {
+      ImagePicker.launchImageLibrary(
+        {
+          mediaType: 'photo',
+          includeBase64: false,
+          maxHeight: 200,
+          maxWidth: 200,
+        },
+        response => {
+          console.log(response);
+          var source = response;
+          var array = Object.keys(source).map(function (key) {
+            return source[key];
+          });
+          var finalArray = array[0][0];
+          if (finalArray != undefined) {
+            console.log()
+            this.setState({fileUri: finalArray.uri}, () => {
+              console.log(`uri: ${this.state.fileUri}`)
+            });
+          }
+        }
+      );
+    };
+
     return (
       <View>
         <ScrollView>
@@ -67,11 +104,9 @@ export default class Altas extends Component {
             </Picker>
           </View>
           <View style={{marginLeft: 20, marginTop: 20}}>
-            <Text>Imagen Avatar</Text>
-            <Image
-              source={require('./img/user.png')}
-              style={{ width: 100, height: 100 }}
-            />
+            <TouchableOpacity onPress={accesoFotos}>
+              {this.renderFileUri()}
+            </TouchableOpacity>
           </View>
           <View style={{marginTop: 50, width: 100, marginLeft: 150}}>
             <Button
