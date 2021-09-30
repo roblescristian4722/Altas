@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Altas from './Altas';
@@ -10,7 +9,9 @@ const Tab = createBottomTabNavigator();
 
 export default function Menu() {
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      theme={barTheme}
+    >
       <Tab.Navigator
         screenOptions={({ route }) => ({
           headerShown: false,
@@ -28,8 +29,8 @@ export default function Menu() {
             // You can return any component that you like here!
             return <Ionicons name={iconName} size={size} color={color} />;
           },
-          tabBarActiveTintColor: 'tomato',
-          tabBarInactiveTintColor: 'gray',
+          // tabBarActieTintColor: 'tomato',
+          // tabBarInactiveTintColor: 'gray',
         })}
       >
         <Tab.Screen name="Altas" component={Altas} />
@@ -37,4 +38,15 @@ export default function Menu() {
       </Tab.Navigator>
     </NavigationContainer>
   );
+}
+
+const barTheme = {
+  colors: {
+    primary: 'rgb(231, 237, 239)',
+    background: 'rgb(0, 26, 45)',
+    card: 'rgb(17, 33, 44)',
+    text: 'rgb(231, 237, 239)',
+    border: 'rgb(199, 199, 204)',
+    notification: 'rgb(255, 69, 58)',
+  }
 }
