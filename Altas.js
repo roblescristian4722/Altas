@@ -15,7 +15,52 @@ export default class Altas extends Component {
       codigo: '',
       campus: '',
       rutai: '',
+      inputData: {
+        nombre: {
+          placeholder: "Nombre",
+          onChangeText: (nombre) => this.setState({nombre}),
+          icon: "user",
+          secure: false,
+        },
+        codigo: {
+          placeholder: "Código",
+          onChangeText: (codigo) => this.setState({codigo}),
+          icon: 'keyboard-o',
+          secure: false,
+        },
+        password: {
+          placeholder: "Contraseña",
+          onChangeText: (password) => this.setState({password}),
+          icon: 'lock',
+          secure: true,
+        },
+      },
     };
+  }
+
+  createInput = (type) => {
+    let inputData
+    if (type == "nombre")
+      inputData = this.state.inputData.nombre
+    else if (type == "codigo")
+      inputData = this.state.inputData.codigo
+    if (type == "password")
+      inputData = this.state.inputData.password
+    return (
+      <Input
+        style={style.input}
+        placeholder={inputData.placeholder}
+        onChangeText={inputData.onChangeText}
+        leftIcon={
+          <Icon
+            name={inputData.icon}
+            size={24}
+            color={colors.text}
+          />
+        }
+        secureTextEntry={inputData.secure}
+      />
+    )
   }
 
   renderFileUri() {
@@ -96,94 +141,117 @@ export default class Altas extends Component {
     };
 
     return (
-      <View>
-        <ScrollView>
-          <Text style={styles.titulo}>Altas</Text>
-          <View style={styles.Alta}>
-            <Input
-              placeholder='Nombre'
-              onChangeText={nombre => this.setState({nombre})}
-              leftIcon={
-                <Icon
-                  name='user'
-                  size={24}
-                  color='black'
-                />
-                }
-            />
-            <Input
-              placeholder='Codigo'
-              onChangeText={codigo => this.setState({codigo})}
-              leftIcon={
-                <Icon
-                  name='keyboard-o'
-                  size={24}
-                  color='black'
-                />
-                }
-            />
-            <Input
-              placeholder='Password'
-              onChangeText={password => this.setState({password})}
-              leftIcon={
-                <Icon
-                  name='lock'
-                  size={24}
-                  color='black'
-                />
-                }
-              secureTextEntry={true}
-            />
-          </View>
-          <View>
-            <Text style={{fontSize: 20, marginLeft: 20, marginTop: 20}}>Campus</Text> 
+      <ScrollView style={style.container}>
+        <Text style={style.title}>Altas</Text>
+        <View style={style.dataInputContainer}>
+          {this.createInput("nombre")}
+          {this.createInput("codigo")}
+          {this.createInput("password")}
+        </View>
 
+        <View style={style.dataBelow}>
+          <View style={style.pickerContainer}>
+            <Text style={style.subtitle}>Campus</Text> 
             <Picker selectedValue={this.state.campus}
-              style={{backgroundColor: 'red', height: 50, width: 150, marginLeft: 20}}
+              mode='dropdown'
+              style={style.picker}
               onValueChange={(itemValue, _) =>
                 this.setState({ selectedValue: itemValue} )
               }
               onValueChange={(campus)=>this.setState({campus})}
             >
-            <Picker.Item label="CUCSH" value="CUCSH" />
-            <Picker.Item label="CUCEI" value="CUCEI" />
-            <Picker.Item label="CUCEA" value="CUCEA" />
-            <Picker.Item label="CUTLAJO" value="CUTLAJO" />
-            <Picker.Item label="CUTONALA" value="CUTONALA" />
+              <Picker.Item label="CUCSH" value="CUCSH" />
+              <Picker.Item label="CUCEI" value="CUCEI" />
+              <Picker.Item label="CUCEA" value="CUCEA" />
+              <Picker.Item label="CUTLAJO" value="CUTLAJO" />
+              <Picker.Item label="CUTONALA" value="CUTONALA" />
             </Picker>
           </View>
-          <View style={{marginLeft: 20, marginTop: 20}}>
+
+          <View style={style.imgContainer}>
+            <Text style={style.subtitle}>Avatar</Text> 
             <TouchableOpacity onPress={accesoFotos}>
               {this.renderFileUri()}
             </TouchableOpacity>
           </View>
-          <View style={{marginTop: 50, width: 100, marginLeft: 150}}>
-            <Button
-              onPress={AltaDatos}
-              icon={
-                <Icon
-                  name="user-plus"
-                  size={15}
-                  color="white"
-                />
-              }
-              title=" Altas"
-            />
-          </View>
-        </ScrollView>
-      </View>
+        </View>
+
+        <View style={style.altaContainer}>
+          <Button
+            onPress={AltaDatos}
+            icon={
+              <Icon
+                name="user-plus"
+                size={15}
+                color={colors.text}
+              />
+            }
+            title=" Dar de alta"
+          />
+        </View>
+      </ScrollView>
     )
   }
 };
 
-const styles = StyleSheet.create({
-  titulo: {
-    fontSize: 30,
-    textAlign: 'center'
+const colors = {
+  text: '#E7EDEF',
+  secondaryBg: "#11476A",
+}
+
+const style = StyleSheet.create({
+  input: {
+    color: colors.text,
+    paddingLeft: 5,
   },
-  Alta: {
-    width: 250,
-    marginTop: 30,
-    marginLeft: 20,
+  dataBelow: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    marginTop: '2%',
+    marginLeft: '10%',
+    width: '80%',
+  },
+  container: {
+    width: '100%',
+    height: '100%',
+  },
+  subtitle: {
+    color: colors.text,
+    fontSize: 20,
+    marginBottom: '5%',
+  },
+  title: {
+    textAlign: 'center',
+    fontSize: 36,
+    margin: '5%',
+    color: colors.text,
+  },
+  dataInputContainer: {
+    width: '80%',
+    marginLeft: '10%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  pickerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  picker: {
+    color: colors.text,
+    backgroundColor: colors.secondaryBg,
+    height: '10%',
+    width: '100%',
+    marginTop: '10%',
+  },
+  imgContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+  },
+  altaContainer: {
+    marginTop: '10%',
+    width: '30%',
+    marginLeft: '35%',
   },
 });

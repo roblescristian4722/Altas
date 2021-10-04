@@ -29,7 +29,6 @@ export default class Listas extends Component {
         <Text style={style.title}>Listas</Text>
         <FlatList
           data={this.state.datos}
-
           renderItem={({item}) => (
             <View style={style.usrContainer}>
               <Image
@@ -48,16 +47,21 @@ export default class Listas extends Component {
   }
 };
 
+const colors = {
+  text: "#E7EDEF",
+  secondaryBg: "#11476A"
+}
+
 const style = StyleSheet.create({
   title: {
     textAlign: 'center',
     fontSize: 36,
-    margin: '2%',
-    color: '#E7EDEF',
+    margin: '5%',
+    color: colors.text,
   },
   usrImg: {
     borderWidth: 1.5,
-    borderColor: 'white',
+    borderColor: colors.text,
     flex: 2,
     height: "100%",
     resizeMode: 'cover',
@@ -65,9 +69,9 @@ const style = StyleSheet.create({
   },
   usrName: {
     borderWidth: 1.5,
-    borderColor: 'white',
+    borderColor: colors.text,
     flex: 10,
-    color: '#E7EDEF',
+    color: colors.text,
     marginLeft: '4%',
     fontSize: 18,
     paddingTop: '2%',
@@ -75,7 +79,7 @@ const style = StyleSheet.create({
     paddingLeft: '4%',
     paddingRight: '4%',
     borderRadius: 100,
-    backgroundColor: '#11476A',
+    backgroundColor: colors.secondaryBg,
   },
   usrContainer: {
     padding: 10,
@@ -86,6 +90,6 @@ const style = StyleSheet.create({
     justifyContent: 'center',
   },
   container: {
-    marginBottom: '14%',
+    marginBottom: '20%',
   },
 })

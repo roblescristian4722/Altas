@@ -29,8 +29,6 @@ export default function Menu() {
             // You can return any component that you like here!
             return <Ionicons name={iconName} size={size} color={color} />;
           },
-          // tabBarActieTintColor: 'tomato',
-          // tabBarInactiveTintColor: 'gray',
         })}
       >
         <Tab.Screen name="Altas" component={Altas} />
@@ -43,7 +41,7 @@ export default function Menu() {
 const barTheme = {
   colors: {
     primary: 'rgb(231, 237, 239)',
-    background: 'rgb(0, 26, 45)',
+    background: 'rgb(8, 25, 35)',
     card: 'rgb(17, 33, 44)',
     text: 'rgb(231, 237, 239)',
     border: 'rgb(199, 199, 204)',
