@@ -4,6 +4,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Altas from './Altas';
 import Listas from './Listas';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Cambios from './Cambios';
 
 const Tab = createBottomTabNavigator();
 
@@ -24,6 +25,8 @@ export default function Menu() {
                 : 'person-add-outline';
             } else if (route.name === 'Listas') {
               iconName = focused ? 'list' : 'list-outline';
+            } else if (route.name === 'Cambios') {
+              iconName = focused ? 'body' : 'body-outline';
             }
 
             // You can return any component that you like here!
@@ -32,6 +35,7 @@ export default function Menu() {
         })}
       >
         <Tab.Screen name="Altas" component={Altas} />
+        <Tab.Screen name="Cambios" component={Cambios} />
         <Tab.Screen name="Listas" component={Listas} />
       </Tab.Navigator>
     </NavigationContainer>

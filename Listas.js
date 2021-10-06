@@ -63,9 +63,10 @@ const style = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: colors.text,
     flex: 2,
+    width: "100%",
     height: "100%",
     resizeMode: 'cover',
-    borderRadius: 100,
+    borderRadius: 50,
   },
   usrName: {
     borderWidth: 1.5,
