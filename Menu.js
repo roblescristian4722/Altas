@@ -26,7 +26,7 @@ export default function Menu() {
             } else if (route.name === 'Listas') {
               iconName = focused ? 'list' : 'list-outline';
             } else if (route.name === 'Cambios') {
-              iconName = focused ? 'body' : 'body-outline';
+              iconName = focused ? 'create' : 'create-outline';
             }
 
             // You can return any component that you like here!
