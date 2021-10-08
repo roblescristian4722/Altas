@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { View, TextInput, Text, StyleSheet, Button, ScrollView, TouchableOpacity } from 'react-native';
+import Altas from './Altas';
 
 export default class Cambios extends Component {
   constructor(props) {
@@ -16,7 +17,7 @@ export default class Cambios extends Component {
     } else if ( parseInt(this.state.userFound) === 0) {
       return <Text style={style.initialMsg}>Usuario no encontrado, ingrese un código válido</Text>
     } else {
-      // TODO: Return a component similar to Altas.js
+      return <Altas userFound={this.state.userFound[0]} />
     }
   }
 
@@ -26,7 +27,7 @@ export default class Cambios extends Component {
       let _this = this;
       xhttp.onreadystatechange = function() {
           if (this.readyState == 4 && this.status == 200) {
-            _this.setState({ userFound: xhttp.responseText })
+            _this.setState({ userFound: JSON.parse(xhttp.response) })
           }
       };
       xhttp.open("GET", `https://cristianrobles4722.000webhostapp.com/busqueda.php?Codigo=${this.state.codigo}`, true);
@@ -35,10 +36,14 @@ export default class Cambios extends Component {
 
     return (
       <ScrollView style={style.container}>
+        <Text style={style.title}>Cambios</Text>
         <View style={style.searchBar}>
           <TextInput
             onChangeText={codigo => {this.setState({codigo})}}
-            style={style.searchInput}/>
+            style={style.searchInput}
+            keyboardType='numeric'
+            placeholder='Código a editar'
+            placeholderTextColor={colors.text}/>
           <TouchableOpacity
             onPress={buscar}
             style={style.searchBtn}>
@@ -57,6 +62,12 @@ const colors = {
 }
 
 const style = StyleSheet.create({
+  title: {
+    textAlign: 'center',
+    fontSize: 36,
+    margin: '5%',
+    color: colors.text,
+  },
   container: {
   },
   initialMsg: {
@@ -68,12 +79,17 @@ const style = StyleSheet.create({
     borderRadius: 10,
     flex: 5,
     color: colors.text,
+    marginRight: '1%',
+    paddingLeft: '5%',
   },
   searchBar: {
+    width: '90%',
+    alignSelf: 'center',
     flexDirection: 'row',
   },
   searchBtn: {
     flex: 2,
+    marginLeft: '1%',
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',

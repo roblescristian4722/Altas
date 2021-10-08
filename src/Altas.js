@@ -9,11 +9,11 @@ export default class Altas extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      fileUri: "",
+      fileUri: this.props.userFound ? this.props.userFound.Imagen : '',
       nombre: '',
       password: '',
       codigo: '',
-      campus: '',
+      campus: this.props.userFound ? this.props.userFound.Centro : '',
       rutai: '',
       inputData: {
         nombre: {
@@ -21,20 +21,24 @@ export default class Altas extends Component {
           onChangeText: (nombre) => this.setState({nombre}),
           icon: "user",
           secure: false,
+          text: this.props.userFound ? this.props.userFound.Nombre : ""
         },
         codigo: {
           placeholder: "Código",
           onChangeText: (codigo) => this.setState({codigo}),
           icon: 'keyboard-o',
           secure: false,
+          text: this.props.userFound ? this.props.userFound.Codigo : ""
         },
         password: {
           placeholder: "Contraseña",
           onChangeText: (password) => this.setState({password}),
           icon: 'lock',
           secure: true,
+          text: ""
         },
       },
+      btnMsg: this.props.userFound ? " Guardar cambios" : " Dar de alta"
     };
   }
 
@@ -51,6 +55,7 @@ export default class Altas extends Component {
         style={style.input}
         placeholder={inputData.placeholder}
         onChangeText={inputData.onChangeText}
+        value={inputData.text}
         leftIcon={
           <Icon
             name={inputData.icon}
@@ -68,7 +73,7 @@ export default class Altas extends Component {
       return <Image source={{uri: this.state.fileUri}} style={{width: 100, height: 100}}/>
     } else {
       return (
-        <Image source={require('./img/user.png')} style={{width: 100, height: 100}}/>
+        <Image source={require('../img/user.png')} style={{width: 100, height: 100}}/>
       )
     }
   }
@@ -102,51 +107,52 @@ export default class Altas extends Component {
     reader.readAsDataURL(blob);
   }
 
-  render() {
-    const AltaDatos = () => {
-      var xhttp = new XMLHttpRequest();
-      xhttp.onreadystatechange = function() {
-          if (this.readyState == 4 && this.status == 200) {
-            // Typical action to be performed when the document is ready:
-            
-          }
-      };
-      xhttp.open("GET", "https://cristianrobles4722.000webhostapp.com/auth.php?nom=" + this.state.nombre + "&codigo=" + this.state.codigo + "&pass=" + this.state.password + "&centro=" + this.state.campus + "&imagen=" + this.state.rutai, true);
-      console.log("GET", "https://cristianrobles4722.000webhostapp.com/auth.php?nom=" + this.state.nombre + "&codigo=" + this.state.codigo + "&pass=" + this.state.password + "&centro=" + this.state.campus + "&imagen=" + this.state.rutai);
-      xhttp.send();
-    };
-
-    const accesoFotos = () => {
-      ImagePicker.launchImageLibrary(
-        {
-          mediaType: 'photo',
-          includeBase64: false,
-          maxHeight: 200,
-          maxWidth: 200,
-        },
-        response => {
-          console.log(response);
-          var source = response;
-          var array = Object.keys(source).map(function (key) {
-            return source[key];
-          });
-          var finalArray = array[0][0];
-          if (finalArray != undefined) {
-            this.setState({fileUri: finalArray.uri}, () => {
-              this.uploadImageToServer();
-            });
-          }
+  altaDatos = () => {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          // Typical action to be performed when the document is ready:
         }
-      );
     };
+    xhttp.open("GET", `https://cristianrobles4722.000webhostapp.com/auth.php?
+      nom=${this.state.nombre}&codigo=${this.state.codigo}
+      &pass=${this.state.password}&centro=${this.state.campus}
+      &imagen=${this.state.rutai}`, true);
+    xhttp.send();
+  };
 
+  accesoFotos = () => {
+    ImagePicker.launchImageLibrary(
+      {
+        mediaType: 'photo',
+        includeBase64: false,
+        maxHeight: 200,
+        maxWidth: 200,
+      },
+      response => {
+        console.log(response);
+        var source = response;
+        var array = Object.keys(source).map(function (key) {
+          return source[key];
+        });
+        var finalArray = array[0][0];
+        if (finalArray != undefined) {
+          this.setState({fileUri: finalArray.uri}, () => {
+            this.uploadImageToServer();
+          });
+        }
+      }
+    );
+  };
+
+  render() {
     return (
       <ScrollView style={style.container}>
-        <Text style={style.title}>Altas</Text>
+        { this.props.userFound ? null : <Text style={style.title}>Altas</Text> }
         <View style={style.dataInputContainer}>
           {this.createInput("nombre")}
           {this.createInput("codigo")}
-          {this.createInput("password")}
+          {this.props.userFound ? null : this.createInput("password")}
         </View>
 
         <View style={style.dataBelow}>
@@ -170,7 +176,7 @@ export default class Altas extends Component {
 
           <View style={style.imgContainer}>
             <Text style={style.subtitle}>Avatar</Text> 
-            <TouchableOpacity onPress={accesoFotos}>
+            <TouchableOpacity onPress={this.accesoFotos}>
               {this.renderFileUri()}
             </TouchableOpacity>
           </View>
@@ -178,7 +184,7 @@ export default class Altas extends Component {
 
         <View style={style.altaContainer}>
           <Button
-            onPress={AltaDatos}
+            onPress={this.altaDatos}
             icon={
               <Icon
                 name="user-plus"
@@ -186,7 +192,7 @@ export default class Altas extends Component {
                 color={colors.text}
               />
             }
-            title=" Dar de alta"
+            title={this.state.btnMsg}
           />
         </View>
       </ScrollView>
@@ -251,7 +257,7 @@ const style = StyleSheet.create({
   },
   altaContainer: {
     marginTop: '10%',
-    width: '30%',
-    marginLeft: '35%',
+    width: '40%',
+    marginLeft: '30%',
   },
 });

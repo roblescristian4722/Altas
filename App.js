@@ -17,7 +17,7 @@ import {
 import {
   Colors,
 } from 'react-native/Libraries/NewAppScreen';
-import Menu from './Menu';
+import Menu from './src/Menu';
 
 const Section = ({children, title}): Node => {
   const isDarkMode = useColorScheme() === 'dark';
