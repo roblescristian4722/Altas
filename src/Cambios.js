@@ -86,6 +86,7 @@ const style = StyleSheet.create({
     width: '90%',
     alignSelf: 'center',
     flexDirection: 'row',
+    marginBottom: '5%',
   },
   searchBtn: {
     flex: 2,
