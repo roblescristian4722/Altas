@@ -14,28 +14,26 @@ export default class Altas extends Component {
       password: '',
       codigo: '',
       campus: this.props.userFound ? this.props.userFound.Centro : '',
-      rutai: '',
+      rutai: this.props.userFound ? this.props.userFound.Imagen : '',
+      updated: false,
       inputData: {
         nombre: {
-          placeholder: "Nombre",
-          onChangeText: (nombre) => this.setState({nombre}),
+          placeholder: this.props.userFound ? this.props.userFound.Nombre : "Nombre",
+          onChangeText: (nombre) => this.setState({nombre: nombre, init: false}),
           icon: "user",
           secure: false,
-          text: this.props.userFound ? this.props.userFound.Nombre : ""
         },
         codigo: {
-          placeholder: "Código",
-          onChangeText: (codigo) => this.setState({codigo}),
+          placeholder: this.props.userFound ? this.props.userFound.Codigo : "Código",
+          onChangeText: (codigo) => this.setState({codigo: codigo, init: false}),
           icon: 'keyboard-o',
           secure: false,
-          text: this.props.userFound ? this.props.userFound.Codigo : ""
         },
         password: {
           placeholder: "Contraseña",
-          onChangeText: (password) => this.setState({password}),
+          onChangeText: (password) => this.setState({password: password, init: false}),
           icon: 'lock',
           secure: true,
-          text: ""
         },
       },
       btnMsg: this.props.userFound ? " Guardar cambios" : " Dar de alta"
@@ -44,22 +42,21 @@ export default class Altas extends Component {
 
   createInput = (type) => {
     let inputData
-    if (type == "nombre")
+    if (type === "nombre")
       inputData = this.state.inputData.nombre
-    else if (type == "codigo")
+    else if (type === "codigo")
       inputData = this.state.inputData.codigo
-    if (type == "password")
+    else if (type === "password")
       inputData = this.state.inputData.password
     return (
       <Input
-        style={style.input}
-        placeholder={inputData.placeholder}
-        onChangeText={inputData.onChangeText}
-        value={inputData.text}
-        leftIcon={
-          <Icon
-            name={inputData.icon}
-            size={24}
+      style={style.input}
+      placeholder={inputData.placeholder}
+      onChangeText={inputData.onChangeText}
+      leftIcon={
+        <Icon
+        name={inputData.icon}
+        size={24}
             color={colors.text}
           />
         }
@@ -114,10 +111,23 @@ export default class Altas extends Component {
           // Typical action to be performed when the document is ready:
         }
     };
-    xhttp.open("GET", `https://cristianrobles4722.000webhostapp.com/auth.php?
-      nom=${this.state.nombre}&codigo=${this.state.codigo}
-      &pass=${this.state.password}&centro=${this.state.campus}
-      &imagen=${this.state.rutai}`, true);
+    if (this.props.userFound) {
+      let url = `https://cristianrobles4722.000webhostapp.com/cambios.php?
+        nom=${this.state.nombre === '' ? this.props.userFound.Nombre : this.state.nombre}
+        &codigo=${this.state.codigo === '' ? this.props.userFound.Codigo : this.state.codigo}
+        &pass=${this.state.password}
+        &centro=${this.state.campus}
+        &imagen=${this.state.rutai}`
+      console.log(url)
+      xhttp.open("GET", url, true);
+      alert("Usuario modificado exitosamente");
+    } else {
+      xhttp.open("GET", `https://cristianrobles4722.000webhostapp.com/auth.php?
+        nom=${this.state.nombre}&codigo=${this.state.codigo}
+        &pass=${this.state.password}&centro=${this.state.campus}
+        &imagen=${this.state.rutai}`, true);
+      alert("Usuario añadido exitosamente");
+    }
     xhttp.send();
   };
 
@@ -152,7 +162,7 @@ export default class Altas extends Component {
         <View style={style.dataInputContainer}>
           {this.createInput("nombre")}
           {this.createInput("codigo")}
-          {this.props.userFound ? null : this.createInput("password")}
+          {this.createInput("password")}
         </View>
 
         <View style={style.dataBelow}>
@@ -220,6 +230,7 @@ const style = StyleSheet.create({
   container: {
     width: '100%',
     height: '100%',
+    marginBottom: '5%',
   },
   subtitle: {
     color: colors.text,

@@ -17,6 +17,7 @@ export default class Cambios extends Component {
     } else if ( parseInt(this.state.userFound) === 0) {
       return <Text style={style.initialMsg}>Usuario no encontrado, ingrese un código válido</Text>
     } else {
+      console.log(this.state.userFound[0])
       return <Altas userFound={this.state.userFound[0]} />
     }
   }
