@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Altas from './Altas';
 import Listas from './Listas';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Cambios from './Cambios';
+import Busqueda from './Busqueda';
 
 const Tab = createBottomTabNavigator();
 
@@ -27,16 +27,22 @@ export default function Menu() {
               iconName = focused ? 'list' : 'list-outline';
             } else if (route.name === 'Cambios') {
               iconName = focused ? 'create' : 'create-outline';
+            } else if (route.name === 'Eliminar') {
+              iconName = focused ? 'trash' : 'trash-outline';
             }
-
             // You can return any component that you like here!
             return <Ionicons name={iconName} size={size} color={color} />;
           },
         })}
       >
         <Tab.Screen name="Altas" component={Altas} />
-        <Tab.Screen name="Cambios" component={Cambios} />
         <Tab.Screen name="Listas" component={Listas} />
+        <Tab.Screen name="Cambios">
+          {() => <Busqueda type="cambios"/>}
+        </Tab.Screen>
+        <Tab.Screen name="Eliminar">
+          {() => <Busqueda type="eliminar"/>}
+        </Tab.Screen>
       </Tab.Navigator>
     </NavigationContainer>
   );

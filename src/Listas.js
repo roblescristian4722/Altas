@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, Dimensions, Image, StyleSheet } from 'react-native';
+import { View, Text, FlatList, Dimensions, Image, StyleSheet, RefreshControl } from 'react-native';
 
 export default class Listas extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      refreshing: false,
       datos: []
     };
   }
 
-  componentDidMount() {
+  getData = () => {
     let _this = this;
     const xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
@@ -23,11 +24,27 @@ export default class Listas extends Component {
     xhttp.send();
   }
 
+  componentDidMount() {
+    this.getData()
+  }
+
+  onRefresh = () => {
+    this.getData()
+    this.setState({refreshing: true});
+    setTimeout(() => this.setState({refreshing: false}), 1000);
+  }
+
   render() {
     return (
       <View style={style.container}>
         <Text style={style.title}>Listas</Text>
         <FlatList
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this.onRefresh}
+            />
+          }
           data={this.state.datos}
           renderItem={({item}) => (
             <View style={style.usrContainer}>
