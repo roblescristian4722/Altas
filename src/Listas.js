@@ -35,9 +35,14 @@ export default class Listas extends Component {
                 style={style.usrImg}
                 source={{uri: item.Imagen}}
               />
-              <Text style={style.usrName}>
-              {item.Nombre}
-              </Text>
+              <View style={style.usrNameContainer}>
+                <Text style={style.usrName}>
+                  {item.Nombre}
+                </Text>
+                <Text style={style.usrSubTitle}>
+                  {item.Codigo + " | " + item.Centro}
+                </Text>
+              </View>
             </View>
           )}
           keyExtractor={item => item.Codigo}
@@ -69,18 +74,24 @@ const style = StyleSheet.create({
     borderRadius: 50,
   },
   usrName: {
+    color: colors.text,
+    fontSize: 18,
+  },
+  usrNameContainer: {
     borderWidth: 1.5,
     borderColor: colors.text,
     flex: 10,
-    color: colors.text,
     marginLeft: '4%',
-    fontSize: 18,
     paddingTop: '2%',
     paddingBottom: '2%',
     paddingLeft: '4%',
     paddingRight: '4%',
     borderRadius: 100,
     backgroundColor: colors.secondaryBg,
+  },
+  usrSubTitle: {
+    color: colors.text,
+    fontSize: 14,
   },
   usrContainer: {
     padding: 10,

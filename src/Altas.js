@@ -12,10 +12,11 @@ export default class Altas extends Component {
       fileUri: this.props.userFound ? this.props.userFound.Imagen : '',
       nombre: '',
       password: '',
-      codigo: '',
+      codigo: this.props.userFound ? this.props.userFound.Codigo : '',
       campus: this.props.userFound ? this.props.userFound.Centro : '',
       rutai: this.props.userFound ? this.props.userFound.Imagen : '',
       updated: false,
+      server: "https://cristianrobles4722.000webhostapp.com/",
       inputData: {
         nombre: {
           placeholder: this.props.userFound ? this.props.userFound.Nombre : "Nombre",
@@ -24,7 +25,7 @@ export default class Altas extends Component {
           secure: false,
         },
         codigo: {
-          placeholder: this.props.userFound ? this.props.userFound.Codigo : "Código",
+          placeholder: "Código",
           onChangeText: (codigo) => this.setState({codigo: codigo, init: false}),
           icon: 'keyboard-o',
           secure: false,
@@ -44,8 +45,11 @@ export default class Altas extends Component {
     let inputData
     if (type === "nombre")
       inputData = this.state.inputData.nombre
-    else if (type === "codigo")
+    else if (type === "codigo"){
       inputData = this.state.inputData.codigo
+      if (this.props.userFound)
+        return null;
+    }
     else if (type === "password")
       inputData = this.state.inputData.password
     return (
@@ -111,23 +115,21 @@ export default class Altas extends Component {
           // Typical action to be performed when the document is ready:
         }
     };
+
+    let url = `&pass=${this.state.password}&codigo=${this.state.codigo}` +
+    `&centro=${this.state.campus}&imagen=${this.state.rutai}`;
+    let msg;
     if (this.props.userFound) {
-      let url = `https://cristianrobles4722.000webhostapp.com/cambios.php?
-        nom=${this.state.nombre === '' ? this.props.userFound.Nombre : this.state.nombre}
-        &codigo=${this.state.codigo === '' ? this.props.userFound.Codigo : this.state.codigo}
-        &pass=${this.state.password}
-        &centro=${this.state.campus}
-        &imagen=${this.state.rutai}`
-      console.log(url)
-      xhttp.open("GET", url, true);
-      alert("Usuario modificado exitosamente");
+      url = `${this.state.server}modificar.php?${url}` +
+      `&nom=${this.state.nombre === '' ? this.props.userFound.Nombre : this.state.nombre}`;
+      msg = "Usuario modificado exitosamente";
     } else {
-      xhttp.open("GET", `https://cristianrobles4722.000webhostapp.com/auth.php?
-        nom=${this.state.nombre}&codigo=${this.state.codigo}
-        &pass=${this.state.password}&centro=${this.state.campus}
-        &imagen=${this.state.rutai}`, true);
-      alert("Usuario añadido exitosamente");
+      url = `${this.state.server}auth.php?${url}&nom=${this.state.nombre}`;
+      msg = "Usuario añadido exitosamente";
     }
+    console.log("url: ", url);
+    xhttp.open("GET", url, true);
+    alert(msg);
     xhttp.send();
   };
 
